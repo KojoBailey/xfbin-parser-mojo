@@ -22,4 +22,5 @@ git clone https://github.com/KojoBailey/xfbin-parser-mojo.git
 mojo build src/main.mojo -o [build_directory]/xfbin_parser
 ```
 
-> [!NOTE] As Mojo does not yet natively support Windows, building on Windows requires [WSL](https://learn.microsoft.com/en-us/windows/wsl/install).
+> [!NOTE]
+> As Mojo does not yet natively support Windows, building on Windows requires [WSL](https://learn.microsoft.com/en-us/windows/wsl/install).
