@@ -3,7 +3,6 @@ from std.sys import argv
 from pretty_print import pretty_print
 from meta_parse import parse_file_data, AutoParsable, BigEndian, ByteSequence 
 
-@fieldwise_init
 struct XfbinBinaryLayout(Copyable & AutoParsable):
 	var file_signature: ByteSequence[4]
 	var version: BigEndian[DType.uint32]
