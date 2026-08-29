@@ -1,19 +1,16 @@
-from .traits import HasDType
+from .traits import AutoParsable, HasDType
 
 from std.sys import size_of
 
 @fieldwise_init
-struct LittleEndian[dtype: DType](HasDType & ImplicitlyCopyable & Writable) where dtype.is_integral():
+struct LittleEndian[dtype: DType](HasDType & ImplicitlyCopyable & AutoParsable & Writable) where dtype.is_integral():
 	comptime T = Scalar[Self.dtype]
 	comptime DTYPE = Self.dtype
 	comptime size = size_of[Self.T]()
 	var value: Self.T
 
-	def __init__(out self):
-		self.value = 0
-
 	def __init__(out self, bytes: List[Byte]):
-		self.value = 0
+		self = Self()
 		for idx in range(len(bytes)):
 			self.value |= Self.T(bytes[idx]) << Self.T(idx * 8)
 
@@ -26,17 +23,14 @@ struct LittleEndian[dtype: DType](HasDType & ImplicitlyCopyable & Writable) wher
 		writer.write(self.value)
 
 @fieldwise_init
-struct BigEndian[dtype: DType](HasDType & ImplicitlyCopyable & Defaultable & Writable) where dtype.is_integral():
+struct BigEndian[dtype: DType](HasDType & ImplicitlyCopyable & AutoParsable & Writable) where dtype.is_integral():
 	comptime T = Scalar[Self.dtype]
 	comptime DTYPE = Self.dtype
 	comptime size = size_of[Self.T]()
 	var value: Self.T
 
-	def __init__(out self):
-		self.value = 0
-
 	def __init__(out self, bytes: List[Byte]):
-		self.value = 0
+		self = Self()
 		for idx in range(len(bytes)):
 			self.value |= Self.T(bytes[idx]) << Self.T((len(bytes) - 1 - idx) * 8)
 

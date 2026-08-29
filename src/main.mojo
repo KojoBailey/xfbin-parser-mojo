@@ -1,10 +1,10 @@
 from std.sys import argv
 
 from pretty_print import pretty_print
-from meta_parse import parse_file_data, BigEndian, ByteSequence 
+from meta_parse import parse_file_data, AutoParsable, BigEndian, ByteSequence 
 
 @fieldwise_init
-struct XfbinBinaryLayout(Copyable & Defaultable):
+struct XfbinBinaryLayout(Copyable & AutoParsable):
 	var file_signature: ByteSequence[4]
 	var version: BigEndian[DType.uint32]
 	var is_encrypted: BigEndian[DType.int16]
@@ -14,17 +14,6 @@ struct XfbinBinaryLayout(Copyable & Defaultable):
 	var meta_size: BigEndian[DType.uint32]
 	var meta_map_index: BigEndian[DType.uint32]
 	var meta_version: BigEndian[DType.uint16]
-
-	def __init__(out self):
-		self.file_signature = ByteSequence[4]()
-		self.version = BigEndian[DType.uint32]()
-		self.is_encrypted = BigEndian[DType.int16]()
-		self.language_id = ByteSequence[2]()
-		self.unk_flag1 = BigEndian[DType.int16]()
-		self.unk_flag2 = BigEndian[DType.int16]()
-		self.meta_size = BigEndian[DType.uint32]()
-		self.meta_map_index = BigEndian[DType.uint32]()
-		self.meta_version = BigEndian[DType.uint16]()
 
 def main():
 	try:
