@@ -1,6 +1,6 @@
-from .traits import HasDType, HasStaticSize
+from .traits import AutoParsable, HasDType, HasStaticSize
 from .numbers import BigEndian, LittleEndian
-from .bytes import ByteSequence 
+from .bytes import Bytes 
 
 def parse_file_data[T: Defaultable & Movable & Deinitable](file: FileHandle) raises -> T:
 	var result = T()
@@ -21,10 +21,15 @@ def parse_file_data[T: Defaultable & Movable & Deinitable](file: FileHandle) rai
 			comptime assert(conforms_to(type, Movable & Deinitable))
 			reflect[T].field_ref[idx](result) = rebind_var[type](LittleEndian[DType.uint32].parse_from_file(file))
 
-		elif reflect[type].base_name() == "ByteSequence":
+		elif reflect[type].base_name() == "Bytes":
 			comptime assert(conforms_to(type, HasStaticSize & Movable & Deinitable))
 			reflect[T].field_ref[idx](result) = \
-				rebind_var[type](ByteSequence[type.STATIC_SIZE].parse_from_file(file))
+				rebind_var[type](Bytes[type.STATIC_SIZE].parse_from_file(file))
+
+		elif conforms_to(type, AutoParsable):
+			comptime assert(conforms_to(type, Defaultable & Movable & Deinitable))
+			reflect[T].field_ref[idx](result) = \
+					rebind_var[type](parse_file_data[type](file))
 
 		else:
 			raise Error("[parse_data error] Unknown Type:", reflect[type].name())

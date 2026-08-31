@@ -3,7 +3,7 @@ from .traits import AutoParsable, HasStaticSize
 from std.memory import unsafe_memcpy
 
 @fieldwise_init
-struct ByteSequence[SIZE: Int](Copyable & HasStaticSize & AutoParsable & Writable):
+struct Bytes[SIZE: Int](Copyable & HasStaticSize & AutoParsable & Writable):
 	comptime STATIC_SIZE = Self.SIZE
 	var bytes: Array[UInt8, Self.SIZE]
 
