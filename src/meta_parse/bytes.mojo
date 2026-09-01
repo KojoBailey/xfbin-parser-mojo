@@ -2,8 +2,7 @@ from .traits import AutoParsable, HasStaticSize
 
 from std.memory import unsafe_memcpy
 
-@fieldwise_init
-struct Bytes[SIZE: Int](Copyable & HasStaticSize & AutoParsable & Writable):
+struct Bytes[SIZE: Int](HasStaticSize & AutoParsable & Writable):
 	comptime STATIC_SIZE = Self.SIZE
 	var bytes: Array[UInt8, Self.SIZE]
 
@@ -18,10 +17,9 @@ struct Bytes[SIZE: Int](Copyable & HasStaticSize & AutoParsable & Writable):
 			count = Self.SIZE
 		)
 
-	@staticmethod
-	def parse_from_file(file: FileHandle) raises -> Self:
+	def parse_from_file(mut self, file: FileHandle) raises:
 		var byte_list: List[UInt8] = file.read_bytes(Self.SIZE) # TODO: Find way to get Array instead of List.
-		return Self(byte_list^)
+		self = Self(byte_list^)
 	
 	def to_hex_string(self, *, delimiter: String = "") -> String:
 		var string_bytes = List[String]()

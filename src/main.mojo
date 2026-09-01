@@ -1,19 +1,19 @@
 from std.sys import argv
 
 from pretty_print import pretty_print
-from meta_parse import parse_file_data, AutoParsable, BigEndian, Bytes 
+from meta_parse import AutoParsable, BigEndian, Bytes, DependentArray
 
 comptime BigI16 = BigEndian[DType.int16]
 comptime BigU16 = BigEndian[DType.uint16]
 comptime BigU32 = BigEndian[DType.uint32]
 
-struct XfbinFlagsLayout(Copyable & AutoParsable):
+struct XfbinFlagsLayout(AutoParsable):
 	var is_encrypted: BigI16
 	var language_id: Bytes[2]
 	var unk_flag1: BigI16
 	var unk_flag2: BigI16
 
-struct XfbinIndexLayout(Copyable & AutoParsable):
+struct XfbinIndexLayout(AutoParsable):
 	var size: BigU32
 	var map_index: BigU32
 	var version: BigU16
@@ -28,8 +28,12 @@ struct XfbinIndexLayout(Copyable & AutoParsable):
 	var chunk_map_count: BigU32
 	var chunk_map_indices_count: BigU32
 	var extra_map_indices_count: BigU32
+	var chunk_types: DependentArray[Bytes[4]]
 
-struct XfbinLayout(Copyable & AutoParsable):
+	def fill_in_dependents(mut self):
+		self.chunk_types.count = Int(self.chunk_type_count.value)
+
+struct XfbinLayout(AutoParsable):
 	var file_signature: Bytes[4]
 	var version: BigU32
 	var flags: XfbinFlagsLayout
@@ -44,7 +48,8 @@ def main():
 		var file_path = args[1]
 		var file = open(file_path, "r")
 
-		var xfbinBinaryData = parse_file_data[XfbinLayout](file^)
+		var xfbinBinaryData = XfbinLayout()
+		xfbinBinaryData.parse_from_file(file^)
 		pretty_print(xfbinBinaryData)
 
 		file.close()
