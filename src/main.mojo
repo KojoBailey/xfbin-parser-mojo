@@ -32,6 +32,8 @@ struct XfbinIndexLayout(AutoParsable):
 	var file_paths: DependentArray[NullTerminatingString]
 	var chunk_names: DependentArray[NullTerminatingString]
 
+	# ISSUE: All dependent fields must come after all independent fields,
+	# or else the file reading gets messed up!
 	def fill_in_dependents(mut self):
 		self.chunk_types.count = Int(self.chunk_type_count.value)
 		self.file_paths.count = Int(self.file_path_count.value)
