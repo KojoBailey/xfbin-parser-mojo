@@ -1,3 +1,4 @@
+# TODO: Fix indentation so it supports newlines.
 def pretty_print[T: AnyType](ref object: T, *, indentation_level: Int = 0):
 	comptime field_count = reflect[T].field_count()
 	comptime field_types = reflect[T].field_types()
