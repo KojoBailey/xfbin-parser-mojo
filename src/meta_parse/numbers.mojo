@@ -1,10 +1,9 @@
-from .traits import AutoParsable, HasDType
+from .traits import AutoParsable
 
 from std.sys import size_of
 
-struct LittleEndian[dtype: DType](HasDType & ImplicitlyCopyable & AutoParsable & Writable) where dtype.is_integral():
+struct LittleEndian[dtype: DType](AutoParsable & ImplicitlyCopyable & Writable) where dtype.is_integral():
 	comptime T = Scalar[Self.dtype]
-	comptime DTYPE = Self.dtype
 	comptime size = size_of[Self.T]()
 	var value: Self.T
 
@@ -23,9 +22,8 @@ struct LittleEndian[dtype: DType](HasDType & ImplicitlyCopyable & AutoParsable &
 	def write_to(self, mut writer: Some[Writer]):
 		writer.write(self.value)
 
-struct BigEndian[dtype: DType](HasDType & ImplicitlyCopyable & AutoParsable & Writable) where dtype.is_integral():
+struct BigEndian[dtype: DType](AutoParsable & ImplicitlyCopyable & Writable) where dtype.is_integral():
 	comptime T = Scalar[Self.dtype]
-	comptime DTYPE = Self.dtype
 	comptime size = size_of[Self.T]()
 	var value: Self.T
 

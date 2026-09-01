@@ -1,7 +1,6 @@
 from .traits import AutoParsable, Dependent
 
 struct DependentArray[T: AutoParsable & Writable](AutoParsable & Dependent & Writable):
-	comptime COUNT_REFERENCE = Self.count
 	var count: Int
 	var data: List[Self.T]
 

@@ -1,9 +1,8 @@
-from .traits import AutoParsable, HasStaticSize
+from .traits import AutoParsable
 
 from std.memory import unsafe_memcpy
 
-struct Bytes[SIZE: Int](HasStaticSize & AutoParsable & Writable):
-	comptime STATIC_SIZE = Self.SIZE
+struct Bytes[SIZE: Int](AutoParsable & Writable):
 	var bytes: Array[UInt8, Self.SIZE]
 
 	def __init__(out self):
