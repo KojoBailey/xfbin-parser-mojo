@@ -3,6 +3,7 @@ from .numbers import BigEndian, LittleEndian
 from .bytes import Bytes
 from .dependent_array import DependentArray
 
+# TODO: These 2 can be removed.
 trait HasStaticSize:
 	comptime STATIC_SIZE: Int
 

@@ -15,7 +15,7 @@ struct DependentArray[T: AutoParsable & Writable](AutoParsable & Dependent & Wri
 			self.data[idx].parse_from_file(file)
 	
 	def write_to(self, mut writer: Some[Writer]):
-		writer.write(t"[{self.count}")
+		writer.write(t"[size = {self.count}\n")
 		for item in self.data:
-			writer.write(t"{item},")
+			writer.write(t"\t{item},\n")
 		writer.write("]")
