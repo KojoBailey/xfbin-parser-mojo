@@ -6,7 +6,7 @@ trait AutoParsable(Copyable & Deinitable):
 			comptime assert(conforms_to(Type, AutoParsable))
 			reflect[Self].field_ref[idx](self) = Type()
 	
-	def perform_intermediate_step[before: StaticString](mut self) raises:
+	def perform_intermediate_step[before: StaticString](mut self, file: FileHandle) raises:
 		pass
 
 	def parse_from_file(mut self, file: FileHandle) raises:
@@ -19,6 +19,6 @@ trait AutoParsable(Copyable & Deinitable):
 			comptime field_name = field_names[idx]
 			comptime assert(conforms_to(T, AutoParsable))
 
-			self.perform_intermediate_step[field_name]()
+			self.perform_intermediate_step[field_name](file)
 
 			reflect[Self].field_ref[idx](self).parse_from_file(file)
