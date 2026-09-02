@@ -12,6 +12,12 @@ struct XfbinChunkMap(AutoParsable & Writable):
 	var file_path_index: BigU32
 	var chunk_name_index: BigU32
 
+struct XfbinChunkMeta(AutoParsable):
+	var size: BigU32
+	var map_index: BigU32
+	var version: BigU16
+	var unk: BigU16
+
 struct XfbinFlagsLayout(AutoParsable):
 	var is_encrypted: BigI16
 	var language_id: Bytes[2]
@@ -19,10 +25,7 @@ struct XfbinFlagsLayout(AutoParsable):
 	var unk_flag2: BigI16
 
 struct XfbinIndexLayout(AutoParsable):
-	var size: BigU32
-	var map_index: BigU32
-	var version: BigU16
-	var unk: BigU16
+	var chunk_meta: XfbinChunkMeta
 	var chunk_type_count: BigU32
 	var chunk_type_size: BigU32
 	var file_path_count: BigU32
@@ -37,6 +40,7 @@ struct XfbinIndexLayout(AutoParsable):
 	var file_paths: DependentArray[NullTerminatingString]
 	var chunk_names: DependentArray[NullTerminatingString]
 	var chunk_maps: DependentArray[XfbinChunkMap]
+	var chunk_map_indices: DependentArray[BigU32]
 
 	def perform_intermediate_step[before: StaticString](mut self, file: FileHandle) raises:
 		comptime if before == "chunk_types":
@@ -49,6 +53,8 @@ struct XfbinIndexLayout(AutoParsable):
 			var current_pos = file.seek(0, whence = 1)
 			_ = file.seek(Int(current_pos + 4 - current_pos % 4))
 			self.chunk_maps.count = Int(self.chunk_map_count.value)
+		elif before == "chunk_map_indices":
+			self.chunk_map_indices.count = Int(self.chunk_map_indices_count.value)
 	
 struct XfbinLayout(AutoParsable):
 	var file_signature: Bytes[4]
