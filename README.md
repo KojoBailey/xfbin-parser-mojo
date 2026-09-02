@@ -3,6 +3,9 @@ Parser for CyberConnect2 XFBIN files, written in the recently-released yet power
 
 This is in very early stages of development so there's very little you can do with it at the moment, but the declarative parsing is currently being worked on and proves itself to work. Take a look at [main.mojo](/src/main.mojo) to see it in action.
 
+> [!NOTE]
+> This repo uses v1.1.0.dev2026090105 of the Mojo compiler, and v1.0.0 of Mojo itself, installed via [uv](https://docs.astral.sh/uv/).
+
 ## Usage
 The app takes 1 argument, which is the file path to the XFBIN you want to parse.
 
