@@ -1,6 +1,6 @@
-from .traits import AutoParsable, Dependent
+from .traits import AutoParsable
 
-struct DependentArray[T: AutoParsable & Writable](AutoParsable & Dependent & Writable):
+struct DependentArray[T: AutoParsable & Writable](AutoParsable & Writable):
 	var count: Int
 	var data: List[Self.T]
 
