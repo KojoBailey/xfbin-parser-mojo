@@ -11,7 +11,7 @@ struct LittleEndian[dtype: DType](AutoParsable & ImplicitlyCopyable & Writable) 
 		self.value = Self.T()
 
 	def __init__(out self, bytes: List[Byte]):
-		self = Self()
+		self.value = Self.T()
 		for idx in range(len(bytes)):
 			self.value |= Self.T(bytes[idx]) << Self.T(idx * 8)
 
